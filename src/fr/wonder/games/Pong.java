@@ -1,12 +1,11 @@
 package fr.wonder.games;
 
-import java.awt.Color;
-
 import fr.wonder.Game;
 import fr.wonder.Keys;
 import fr.wonder.audio.ClipSettings;
 import fr.wonder.audio.Sound;
 import fr.wonder.audio.SoundManager;
+import fr.wonder.display.Color;
 import fr.wonder.display.Graphics;
 import fr.wonder.display.SpriteSheet;
 

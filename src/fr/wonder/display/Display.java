@@ -22,8 +22,9 @@ public class Display {
 	
 	private final List<BiConsumer<Integer, Integer>> resizeEventHandlers = new ArrayList<>();
 	
-	public Display(int resolutionX, int resolutionY) {
-		GLFWErrorCallback.createPrint(System.err).set();
+	public Display(int resolutionX, int resolutionY, boolean debugInfo) {
+		if(debugInfo)
+			GLFWErrorCallback.createPrint(System.err).set();
 		
 		winWidth = resolutionX;
 		winHeight = resolutionY;
@@ -48,7 +49,8 @@ public class Display {
 
 		GL.createCapabilities();
 		
-		GLUtil.setupDebugMessageCallback(System.err);
+		if(debugInfo)
+			GLUtil.setupDebugMessageCallback(System.err);
 		
 		glEnable(GL_BLEND);
 		
@@ -59,7 +61,7 @@ public class Display {
 			glViewport(0, 0, w, h);
 			winWidth = w;
 			winHeight = h;
-			for(var handler : resizeEventHandlers)
+			for(BiConsumer<Integer, Integer> handler : resizeEventHandlers)
 				handler.accept(w, h);
 		});
 		
@@ -80,7 +82,8 @@ public class Display {
 
 	public void destroy() {
 		Callbacks.glfwFreeCallbacks(window);
-		glfwSetErrorCallback(null).free();
+		GLFWErrorCallback ec = glfwSetErrorCallback(null);
+		if(ec != null) ec.free();
 		GL.setCapabilities(null);
 		GL.destroy();
 		glfwDestroyWindow(window);

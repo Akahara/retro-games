@@ -1,18 +1,31 @@
 package fr.wonder.display.internal;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_RGBA8;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import javax.imageio.ImageIO;
+import org.lwjgl.stb.STBImage;
 
 public class Texture {
 
@@ -40,35 +53,15 @@ public class Texture {
 	}
 	
 	public static Texture loadTexture(InputStream stream) throws IOException {
-		return loadTexture(ImageIO.read(stream));
+		return loadTexture(BufferUtils.readAllToBuffer(stream));
 	}
+	
+	public static Texture loadTexture(ByteBuffer image) {
+		int id;
+		int[] widthB = new int[1], heightB = new int[1], channelsB = new int[1];
+		ByteBuffer buf = STBImage.stbi_load_from_memory(image, widthB, heightB, channelsB, 4);
 		
-	public static Texture loadTexture(BufferedImage image) {
-		int id, width, height;
-
-		width = image.getWidth();
-		height = image.getHeight();
-
-		int size = width * height;
-		int[] data = new int[size];
-
-		image.getRGB(0, 0, width, height, data, 0, width);
-
-		int[] px = new int[size];
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				int pos = i * width + j;
-				int a = (data[pos] & 0xff000000) >> 24;
-				int r = (data[pos] & 0x00ff0000) >> 16;
-				int g = (data[pos] & 0x0000ff00) >> 8;
-				int b = (data[pos] & 0x000000ff);
-				px[(height - 1 - i) * width + j] =
-						a << 24 |
-						b << 16 |
-						g << 8 |
-						r;
-			}
-		}
+		int width = widthB[0], height = heightB[0];
 
 		id = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, id);
@@ -76,20 +69,20 @@ public class Texture {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, px);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
 		unbind();
 		
 		return new Texture(id, width, height);
 	}
 	
-	public static Texture fromBuffer(int width, int height, ByteBuffer buffer) {
+	public static Texture fromBuffer(int width, int height, ByteBuffer rawImageBuffer) {
 		int id = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_FLOAT, buffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_FLOAT, rawImageBuffer);
 		unbind();
 		return new Texture(id, width, height);
 	}

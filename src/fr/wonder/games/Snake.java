@@ -1,6 +1,5 @@
 package fr.wonder.games;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import fr.wonder.Keys;
 import fr.wonder.audio.ClipSettings;
 import fr.wonder.audio.Sound;
 import fr.wonder.audio.SoundManager;
+import fr.wonder.display.Color;
 import fr.wonder.display.Graphics;
 
 public class Snake extends Game {

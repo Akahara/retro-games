@@ -8,7 +8,6 @@ import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

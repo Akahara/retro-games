@@ -12,17 +12,24 @@ import fr.wonder.games.Snake;
 public class Main {
 	
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException {
-		int displayWidth = 5*100, displayHeight = 5*100;
+		boolean fullScreen = System.getenv("WINDOWED") == null;
+		boolean debugInfo = System.getenv("NO_DBG") == null;
+		String gameName = args.length > 0 ? args[0] : "pong";
 		
-		Display display = new Display(displayWidth, displayHeight);
+		System.out.println("Starting (" 
+				+ (fullScreen?"fullscreen ":"") 
+				+ (debugInfo?"debuginfo ":"") 
+				+ ("gamename="+gameName)
+				+ ")");
+		
+		int displayWidth = 5*100, displayHeight = 5*100;
+		Display display = new Display(displayWidth, displayHeight, debugInfo);
 		Keys.setActiveWindow(display.getWindowHandle());
 		Graphics graphics = new Graphics(displayWidth, displayHeight);
 		display.addResizeEventHandler(graphics::setDisplaySize);
 		
-		boolean fullScreen = System.getenv("WINDOWED") == null;
 		display.setVisible(true, fullScreen);
 		
-		String gameName = args.length > 0 ? args[0] : "snake";
 		Game game;
 		
 		switch (gameName) {

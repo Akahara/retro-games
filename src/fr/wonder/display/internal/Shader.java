@@ -34,7 +34,8 @@ public class Shader {
 		try (InputStream is = Shader.class.getResourceAsStream(resourcePath)) {
 			if(is == null)
 				throw new IOException("Shader does not exist: " + resourcePath);
-			String source = new String(is.readAllBytes());
+			byte[] bytes = BufferUtils.readAll(is);
+			String source = new String(bytes);
 			shader = glCreateShader(type.glType);
 			
 			glShaderSource(shader, source);
