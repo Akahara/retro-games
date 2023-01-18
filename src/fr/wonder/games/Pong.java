@@ -29,7 +29,7 @@ public class Pong extends Game {
 	private float ballX, ballY, ballVX, ballVY;
 	private float ballSpeed;
 	private int bounces = 0;
-	private int scoreLeft = 2, scoreRight = 0;
+	private int scoreLeft = 0, scoreRight = 0;
 	
 	private class Sounds {
 

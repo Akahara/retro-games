@@ -9,7 +9,7 @@ import fr.wonder.display.Graphics;
 import fr.wonder.games.Pong;
 import fr.wonder.games.Snake;
 
-public class Main {
+public class RetroGames {
 	
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException {
 		boolean fullScreen = System.getenv("WINDOWED") == null;

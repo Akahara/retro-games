@@ -19,7 +19,7 @@ void main(void) {
   // corner stretch effect
   uv *= 1+.03*length(uv);
   // horizontal jagged effect
-  uv.x += length(uv) * 15/u_resolution.x * (fract(gl_FragCoord.y/2)*2-1);
+  uv.x += length(uv) * 5/u_resolution.x * (fract(gl_FragCoord.y/2)*2-1);
   // crt effect
   vec2 offset = u_CRTStrength * (.6+.4*length(uv)) * vec2(1/u_resolution.x, 0);
   

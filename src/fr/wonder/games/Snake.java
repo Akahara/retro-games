@@ -17,6 +17,7 @@ public class Snake extends Game {
 	private static final int C = 12; // cell count (in x and y)
 	private static final int EYE_SIZE = 2;
 	private static final float INITIAL_GAME_SPEED = .3f; // in movements per second
+	private static final float DEATH_ANIMATION_DURATION = .2f; // initial delay, in seconds per square
 	
 	private final ASnake
 			p1 = new ASnake(Keys.KEY_P1_LEFT, Keys.KEY_P1_RIGHT, Keys.KEY_P1_DOWN, Keys.KEY_P1_UP, Color.orange),
@@ -25,6 +26,9 @@ public class Snake extends Game {
 
 	private float inputCooldown;
 	private int fruitX, fruitY;
+	private ASnake deadSnake;
+	private float deathAnimationCooldown;
+	private float nextDeathAnimationCooldown;
 	
 	private static class Sounds {
 
@@ -64,8 +68,20 @@ public class Snake extends Game {
 
 	@Override
 	public void step(float realDelta) {
-		for(ASnake s : snakes)
-			s.step(realDelta);
+		if(deadSnake != null) {
+			deathAnimationCooldown -= realDelta;
+			if(deathAnimationCooldown < 0) {
+				nextDeathAnimationCooldown *= .8f;
+				deathAnimationCooldown += nextDeathAnimationCooldown;
+				deadSnake.body.remove(0);
+				deadSnake.body.remove(0);
+				if(deadSnake.body.isEmpty())
+					reset();
+			}
+		} else {
+			for(ASnake s : snakes)
+				s.step(realDelta);
+		}
 	}
 	
 	private boolean moveSnake(ASnake snake) {
@@ -85,31 +101,32 @@ public class Snake extends Game {
 		}
 		
 		// check bounds collision
-		if(newX < 0 || newX >= C || newY < 0 || newY >= C) {
-			reset();
+		if(newX < 0 || newX >= C || newY < 0 || newY >= C)
 			return true;
-		}
 		// check self collision
 		for(int i = 0; i < snake.body.size()-2; i += 2) {
-			if(newX == snake.body.get(i) && newY == snake.body.get(i+1)) {
-				reset();
+			if(newX == snake.body.get(i) && newY == snake.body.get(i+1))
 				return true;
-			}
 		}
 		// check other collision
 		ASnake other = snake == p1 ? p2 : p1;
 		for(int i = 0; i < other.body.size(); i += 2) {
-			if(newX == other.body.get(i) && newY == other.body.get(i+1)) {
-				reset();
+			if(newX == other.body.get(i) && newY == other.body.get(i+1))
 				return true;
-			}
 		}
 		
 		return false;
 	}
 	
-	private void reset() {
+	private void triggerSnakeDeath(ASnake deadSnake) {
+		this.deadSnake = deadSnake;
+		nextDeathAnimationCooldown = DEATH_ANIMATION_DURATION;
+		deathAnimationCooldown = nextDeathAnimationCooldown;
 		sounds.death.play();
+	}
+	
+	private void reset() {
+		deadSnake = null;
 		
 		for(ASnake snake : snakes) {
 			snake.body.clear();
@@ -199,8 +216,10 @@ public class Snake extends Game {
 			currentInputCooldown -= realDelta;
 			while(currentInputCooldown < 0) {
 				currentInputCooldown += inputCooldown;
-				if(moveSnake(this))
+				if(moveSnake(this)) {
+					triggerSnakeDeath(this);
 					return;
+				}
 			}
 			
 			updateEyePos(dirX, dirY);
