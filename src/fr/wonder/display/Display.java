@@ -12,6 +12,7 @@ import java.util.function.BiConsumer;
 
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 
@@ -36,8 +37,19 @@ public class Display {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+		glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+//		glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 		
-		window = glfwCreateWindow(resolutionX, resolutionY, "Shader Display", NULL, NULL);
+		long monitor = glfwGetPrimaryMonitor();
+		GLFWVidMode videoMode = glfwGetVideoMode(monitor);
+		glfwWindowHint(GLFW_RED_BITS, videoMode.redBits());
+		glfwWindowHint(GLFW_GREEN_BITS, videoMode.greenBits());
+		glfwWindowHint(GLFW_BLUE_BITS, videoMode.blueBits());
+		glfwWindowHint(GLFW_REFRESH_RATE, videoMode.refreshRate());
+		winWidth = resolutionX = videoMode.width();
+		winHeight = resolutionY = videoMode.height();
+		
+		window = glfwCreateWindow(resolutionX, resolutionY, "Retro games", monitor, NULL);
 
 		if (window == NULL)
 			throw new IllegalStateException("Unable to create a window !");
@@ -91,13 +103,13 @@ public class Display {
 	public void setVisible(boolean visible, boolean fullScreen) {
 		if(visible) {
 			glfwShowWindow(window);
-			if(fullScreen) {
-				long monitor = glfwGetPrimaryMonitor();
-				int[] width = new int[1], height = new int[1];
-				int[] xpos = new int[1], ypos = new int[1];
-				glfwGetMonitorWorkarea(monitor, xpos, ypos, width, height);
-				glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width[0], height[0], GLFW_DONT_CARE);
-			}
+//			if(fullScreen) {
+//				long monitor = glfwGetPrimaryMonitor();
+//				int[] width = new int[1], height = new int[1];
+//				int[] xpos = new int[1], ypos = new int[1];
+//				glfwGetMonitorWorkarea(monitor, xpos, ypos, width, height);
+//				glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width[0], height[0], GLFW_DONT_CARE);
+//			}
 		} else {
 			glfwHideWindow(window);
 		}
