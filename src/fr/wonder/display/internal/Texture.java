@@ -59,6 +59,7 @@ public class Texture {
 	public static Texture loadTexture(ByteBuffer image) {
 		int id;
 		int[] widthB = new int[1], heightB = new int[1], channelsB = new int[1];
+		STBImage.stbi_set_flip_vertically_on_load(true);
 		ByteBuffer buf = STBImage.stbi_load_from_memory(image, widthB, heightB, channelsB, 4);
 		
 		int width = widthB[0], height = heightB[0];
