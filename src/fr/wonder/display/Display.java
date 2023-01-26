@@ -57,7 +57,8 @@ public class Display {
 
 		glfwMakeContextCurrent(window);
 		glfwFocusWindow(window);
-		glfwSwapInterval(1);
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		glfwSwapInterval(1); // enable VSync
 
 		GL.createCapabilities();
 		
@@ -103,16 +104,9 @@ public class Display {
 		window = 0;
 	}
 	
-	public void setVisible(boolean visible, boolean fullScreen) {
+	public void setVisible(boolean visible) {
 		if(visible) {
 			glfwShowWindow(window);
-//			if(fullScreen) {
-//				long monitor = glfwGetPrimaryMonitor();
-//				int[] width = new int[1], height = new int[1];
-//				int[] xpos = new int[1], ypos = new int[1];
-//				glfwGetMonitorWorkarea(monitor, xpos, ypos, width, height);
-//				glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width[0], height[0], GLFW_DONT_CARE);
-//			}
 		} else {
 			glfwHideWindow(window);
 		}

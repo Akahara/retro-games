@@ -12,7 +12,6 @@ import fr.wonder.games.Snake;
 public class RetroGames {
 	
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException {
-		boolean fullScreen = System.getenv("WINDOWED") == null;
 		boolean debugInfo = System.getenv("NO_DBG") == null;
 		String gameName = args.length > 0 ? args[0] : "pong";
 		
@@ -20,8 +19,7 @@ public class RetroGames {
 		Keys.setActiveWindow(display.getWindowHandle());
 		Graphics graphics = new Graphics(display.getWinWidth(), display.getWinHeight());
 		display.addResizeEventHandler(graphics::setDisplaySize);
-		display.setVisible(true, fullScreen);
-		
+		display.setVisible(true);
 		Game game;
 		
 		switch (gameName) {

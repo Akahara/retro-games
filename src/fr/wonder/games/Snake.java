@@ -100,6 +100,17 @@ public class Snake extends Game {
 			snake.body.remove(0);
 		}
 		
+		if(isSnakeColliding(newX, newY, snake)) {
+			// remove the snake's head
+			snake.body.remove(snake.body.size()-1);
+			snake.body.remove(snake.body.size()-1);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean isSnakeColliding(int newX, int newY, ASnake snake) {
 		// check bounds collision
 		if(newX < 0 || newX >= C || newY < 0 || newY >= C)
 			return true;
@@ -185,6 +196,7 @@ public class Snake extends Game {
 		}
 	
 		private void draw(Graphics graphics) {
+			Color color = deadSnake == this ? Color.red : this.color;
 			for(int i = 0; i < body.size(); i += 2)
 				graphics.drawRect(1+(W+1)*body.get(i), 1+(W+1)*body.get(i+1), W, W, color);
 	

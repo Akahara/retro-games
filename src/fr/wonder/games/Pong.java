@@ -54,6 +54,9 @@ public class Pong extends Game {
 	}
 	
 	private void reset() {
+		if(scoreLeft > 9 || scoreRight > 9)
+			scoreLeft = scoreRight = 0;
+		
 		inputCooldown = RESET_COOLDOWN;
 		ballX = (W-BALL_SIZE)/2.f;
 		ballY = (H-BALL_SIZE)/2.f;
