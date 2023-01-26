@@ -13,18 +13,18 @@ public class Pong extends Game {
 
 	private static final float PI = (float)Math.PI;
 	
-	private static final int W = 300, H = 150;
-	private static final int TEXT_W = 3*10/5, TEXT_H = 10;
-	private static final int PADDLE_HEIGHT = 30;
-	private static final int PADDLE_WIDTH = 8;
+	private static final int   W = 300, H = 150;
+	private static final int   TEXT_W = 3*10/5, TEXT_H = 10;
+	private static final int   PADDLE_HEIGHT = 30;
+	private static final int   PADDLE_WIDTH = 8;
 	private static final float PADDLE_SPEED = (H-PADDLE_HEIGHT)/.5f;
-	private static final int BALL_SIZE = 3;
+	private static final int   BALL_SIZE = 3;
 	private static final float INITIAL_BALL_SPEED = W/2.f;
 	private static final float TERMINAL_BALL_SPEED = W/1.f;
 	private static final float RESET_COOLDOWN = 1.f;
 	
 	private float inputCooldown;
-	private float paddleLeft  = (H-PADDLE_HEIGHT)/2.f;  // in range 0..H-paddleSize
+	private float paddleLeft  = (H-PADDLE_HEIGHT)/2.f; // in range 0..H-paddleSize
 	private float paddleRight = (H-PADDLE_HEIGHT)/2.f; // in range 0..H-paddleSize
 	private float ballX, ballY, ballVX, ballVY;
 	private float ballSpeed;
@@ -54,8 +54,10 @@ public class Pong extends Game {
 	}
 	
 	private void reset() {
-		if(scoreLeft > 9 || scoreRight > 9)
+		if(scoreLeft > 9 || scoreRight > 9) {
 			scoreLeft = scoreRight = 0;
+			paddleLeft = paddleRight = (H-PADDLE_HEIGHT)/2.f;
+		}
 		
 		inputCooldown = RESET_COOLDOWN;
 		ballX = (W-BALL_SIZE)/2.f;

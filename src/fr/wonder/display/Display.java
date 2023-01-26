@@ -23,12 +23,9 @@ public class Display {
 	
 	private final List<BiConsumer<Integer, Integer>> resizeEventHandlers = new ArrayList<>();
 	
-	public Display(int resolutionX, int resolutionY, boolean debugInfo) {
+	public Display(boolean debugInfo) {
 		if(debugInfo)
 			GLFWErrorCallback.createPrint(System.err).set();
-		
-		winWidth = resolutionX;
-		winHeight = resolutionY;
 		
 		if (!glfwInit())
 			throw new IllegalStateException("Unable to initialize GLFW !");
@@ -47,10 +44,10 @@ public class Display {
 		glfwWindowHint(GLFW_GREEN_BITS, videoMode.greenBits());
 		glfwWindowHint(GLFW_BLUE_BITS, videoMode.blueBits());
 		glfwWindowHint(GLFW_REFRESH_RATE, videoMode.refreshRate());
-		winWidth = resolutionX = videoMode.width();
-		winHeight = resolutionY = videoMode.height();
+		winWidth  = videoMode.width();
+		winHeight = videoMode.height();
 		
-		window = glfwCreateWindow(resolutionX, resolutionY, "Retro games", monitor, NULL);
+		window = glfwCreateWindow(winWidth, winHeight, "Retro games", monitor, NULL);
 
 		if (window == NULL)
 			throw new IllegalStateException("Unable to create a window !");
@@ -67,7 +64,7 @@ public class Display {
 		
 		glEnable(GL_BLEND);
 		
-		glViewport(0, 0, resolutionX, resolutionY);
+		glViewport(0, 0, winWidth, winHeight);
 		glClearColor(0, 0, 0, 1);
 		
 		glfwSetWindowSizeCallback(window, (win, w, h) -> {
