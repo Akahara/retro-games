@@ -2,8 +2,9 @@
 
 A quick and dirty playground for random (mostly retro) games.
 
-![pong vignette](_git/pong.png)
-![snake vignette](_git/snake.png)
+| | |
+|-|-|
+| ![pong vignette](_git/pong.png) | ![snake vignette](_git/snake.png) |
 
 ## Contributing
 
