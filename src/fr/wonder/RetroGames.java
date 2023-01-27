@@ -13,7 +13,7 @@ public class RetroGames {
 	
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException {
 		boolean debugInfo = System.getenv("NO_DBG") == null;
-		String gameName = args.length > 0 ? args[0] : "pong";
+		String gameName = args.length > 0 ? args[0] : "snake";
 		
 		Display display = new Display(debugInfo);
 		Keys.setActiveWindow(display.getWindowHandle());

@@ -21,7 +21,7 @@ public class Color {
 	}
 
 	public static final Color white    = new Color(255, 255, 255);
-	public static final Color orange   = new Color(255, 255, 100);
+	public static final Color orange   = new Color(255, 200, 0);
 	public static final Color darkGray = new Color(50, 50, 50);
 	public static final Color cyan     = new Color(0, 255, 255);
 	public static final Color red      = new Color(255, 0, 0);
