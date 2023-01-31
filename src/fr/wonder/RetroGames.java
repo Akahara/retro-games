@@ -13,7 +13,7 @@ public class RetroGames {
 	
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException {
 		boolean debugInfo = System.getenv("NO_DBG") == null;
-		String gameName = args.length > 0 ? args[0] : "snake";
+		String gameName = getGameToRun(args);
 		
 		Display display = new Display(debugInfo);
 		Keys.setActiveWindow(display.getWindowHandle());
@@ -40,6 +40,20 @@ public class RetroGames {
 		}
 		
 		display.destroy();
+	}
+	
+	private static String getGameToRun(String[] args) {
+		// To run a specific game during development,
+		// set your run configuration's args to [ "<game name>" ]
+		// or alternatively set your DBG_GAME environment variable
+		// to the game's name
+		
+		if(args.length > 0)
+			return args[0];
+		String fromEnv = System.getenv("DBG_GAME");
+		if(fromEnv != null)
+			return fromEnv;
+		return "snake";
 	}
 
 }
