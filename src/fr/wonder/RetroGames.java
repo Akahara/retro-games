@@ -8,12 +8,13 @@ import fr.wonder.display.Display;
 import fr.wonder.display.Graphics;
 import fr.wonder.games.Pong;
 import fr.wonder.games.Snake;
+import fr.wonder.games.pacman.Pacman;
 
 public class RetroGames {
 	
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException {
 		boolean debugInfo = System.getenv("NO_DBG") == null;
-		String gameName = args.length > 0 ? args[0] : "snake";
+		String gameName = args.length > 0 ? args[0] : "pacman";
 		
 		Display display = new Display(debugInfo);
 		Keys.setActiveWindow(display.getWindowHandle());
@@ -26,6 +27,7 @@ public class RetroGames {
 		switch (gameName) {
 		case "snake": game = new Snake(); break;
 		case "pong":  game = new Pong();  break;
+		case "pacman": game = new Pacman(); break;
 		default:
 			throw new IllegalArgumentException("Unknown game: " + gameName);
 		}
