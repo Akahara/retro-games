@@ -3,17 +3,19 @@ package fr.wonder.display.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class BufferUtils {
 
 	public static ByteBuffer readAllToBuffer(InputStream is) throws IOException {
 		byte[] buf = new byte[1024];
-		ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+		ByteBuffer buffer = ByteBuffer.allocateDirect(1024).order(ByteOrder.nativeOrder());
 		int read;
 		while((read = is.read(buf)) != -1) {
 			buffer.put(buf, 0, read);
 			if(buffer.position() == buffer.capacity()) {
-				ByteBuffer newBuffer = ByteBuffer.allocateDirect(buffer.capacity() + 4*1024);
+				ByteBuffer newBuffer = ByteBuffer.allocateDirect(buffer.capacity() + 4*1024).order(ByteOrder.nativeOrder());
+				buffer.flip();
 				newBuffer.put(buffer);
 				buffer = newBuffer;
 			}

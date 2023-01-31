@@ -47,6 +47,8 @@ public class Snake extends Game {
 		int S = 1+(W+1)*C;
 		graphics.setSize(S, S);
 		graphics.setEffect_CRT(10.f);
+		graphics.setEffect_cornerStretch(.03f);
+		graphics.setEffect_jaggedStretch(5f);
 		
 		sounds.music.play();
 		reset();

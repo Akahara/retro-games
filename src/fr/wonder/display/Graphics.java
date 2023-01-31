@@ -37,7 +37,9 @@ public class Graphics {
 	
 	private static class Effects {
 		
-		float CRTStrength = 10;
+		float CRTStrength = 0;
+		float jaggedStrength = 0;
+		float cornerStretchStrength = 0;
 		
 	}
 	
@@ -118,6 +120,8 @@ public class Graphics {
 		blitShader.setUniform2f("u_resolution", displayWidth, displayHeight);
 		blitShader.setUniform4f("u_transform", blitX, blitY, blitW, blitH);
 		blitShader.setUniform1f("u_CRTStrength", effects.CRTStrength);
+		blitShader.setUniform1f("u_jaggedStrength", effects.jaggedStrength);
+		blitShader.setUniform1f("u_cornerStretch", effects.cornerStretchStrength);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 	}
 	
@@ -128,7 +132,7 @@ public class Graphics {
 	public SpriteSheet loadSpriteSheet(String path, int width, int height) {
 		Texture texture;
 		try {
-			texture = Texture.loadTexture(Graphics.class.getResourceAsStream(path));
+			texture = Texture.loadTexture(path);
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not load texture " + path, e);
 		}
@@ -136,10 +140,10 @@ public class Graphics {
 			throw new IllegalArgumentException(String.format("Got size %dx%d, expected %dx%d", texture.width, texture.height, width, height));
 		return new SpriteSheet(texture);
 	}
-	
-	public void setEffect_CRT(float strength) {
-		this.effects.CRTStrength = strength;
-	}
+
+	public void setEffect_CRT(float strength) { this.effects.CRTStrength = strength; }
+	public void setEffect_cornerStretch(float strength) { this.effects.cornerStretchStrength = strength; }
+	public void setEffect_jaggedStretch(float strength) { this.effects.jaggedStrength = strength; }
 	
 	public void clear() {
 		glClear(GL_COLOR_BUFFER_BIT);

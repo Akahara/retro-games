@@ -8,13 +8,12 @@ import fr.wonder.display.Display;
 import fr.wonder.display.Graphics;
 import fr.wonder.games.Pong;
 import fr.wonder.games.Snake;
-import fr.wonder.games.pacman.Pacman;
 
 public class RetroGames {
 	
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException {
 		boolean debugInfo = System.getenv("NO_DBG") == null;
-		String gameName = args.length > 0 ? args[0] : "pacman";
+		String gameName = getGameToRun(args);
 		
 		Display display = new Display(debugInfo);
 		Keys.setActiveWindow(display.getWindowHandle());
@@ -27,7 +26,6 @@ public class RetroGames {
 		switch (gameName) {
 		case "snake": game = new Snake(); break;
 		case "pong":  game = new Pong();  break;
-		case "pacman": game = new Pacman(); break;
 		default:
 			throw new IllegalArgumentException("Unknown game: " + gameName);
 		}
@@ -42,6 +40,20 @@ public class RetroGames {
 		}
 		
 		display.destroy();
+	}
+	
+	private static String getGameToRun(String[] args) {
+		// To run a specific game during development,
+		// set your run configuration's args to [ "<game name>" ]
+		// or alternatively set your DBG_GAME environment variable
+		// to the game's name
+		
+		if(args.length > 0)
+			return args[0];
+		String fromEnv = System.getenv("DBG_GAME");
+		if(fromEnv != null)
+			return fromEnv;
+		return "snake";
 	}
 
 }

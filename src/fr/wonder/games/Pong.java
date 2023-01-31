@@ -48,7 +48,9 @@ public class Pong extends Game {
 		textSprites = graphics.loadSpriteSheet("/games/pong/text.png", 11*3, 5).setGrid(3, 5);
 		
 		graphics.setSize(W, H);
-		graphics.setEffect_CRT(4.f);
+		graphics.setEffect_CRT(4f);
+		graphics.setEffect_cornerStretch(.03f);
+		graphics.setEffect_jaggedStretch(5f);
 		sounds.music.play();
 		reset();
 	}

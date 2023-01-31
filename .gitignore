@@ -1,7 +1,6 @@
 *.class
-
 hs_err_pid*
-
+target/
 bin/
 .settings/
 .project
